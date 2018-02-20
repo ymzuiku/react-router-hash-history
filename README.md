@@ -1,6 +1,8 @@
 # React Router Hash History
 
-![](markdownimg/2018-02-20-15-34-33.png)
+> Use React-Router and History change Page, can use in React \ ReactNative \ ReactXP
+
+![](markdownimg/2018-02-20-15-42-17.png)
 
 ## How to use
 
