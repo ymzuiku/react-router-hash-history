@@ -32,7 +32,9 @@ history.listen(e => {
         window.location.href = position + e.pathname;
       }
     }
-  } catch (err) {}
+  } catch (err) {
+    // err
+  }
 });
 
 //监听触发操作
@@ -42,7 +44,9 @@ function hashChange() {
     if (pathname !== lastHistory.pathname) {
       history.push(pathname);
     }
-  } catch (err) {}
+  } catch (err) {
+    // err
+  }
 }
 
 if (!window.location) {
