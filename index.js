@@ -78,7 +78,9 @@ try {
       }
     }, 300);
   }
-} catch (err) {}
+} catch (err) {
+  //
+}
 
 function Redirect({ ...props }) {
   // 去除相同路由的错误
