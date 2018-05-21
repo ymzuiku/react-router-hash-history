@@ -76,7 +76,7 @@ try {
       if (ischanged) {
         hashChange(); // TODO，对应新的hash执行的操作函数
       }
-    }, 350);
+    }, 300);
   }
 } catch (err) {}
 
@@ -85,11 +85,11 @@ function Redirect({ ...props }) {
   if (props.to === history.location.pathname) {
     return null;
   }
-  return <ReactRedirect {...props} />;
+  return React.createElement(ReactRedirect, { ...props });
 }
 
 function RootRouter({ ...props }) {
-  return <Router history={history} {...props} />;
+  return React.createElement(Router, { history, ...props });
 }
 
 export {
