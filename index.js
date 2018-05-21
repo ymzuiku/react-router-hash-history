@@ -82,17 +82,17 @@ try {
   //
 }
 
-function Redirect({ ...props }) {
+const Redirect = ({ ...props }) => {
   // 去除相同路由的错误
   if (props.to === history.location.pathname) {
     return null;
   }
   return React.createElement(ReactRedirect, { ...props });
-}
+};
 
-function RootRouter({ ...props }) {
+const RootRouter = ({ ...props }) => {
   return React.createElement(Router, { history, ...props });
-}
+};
 
 export {
   history,
