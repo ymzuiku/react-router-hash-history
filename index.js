@@ -1,5 +1,13 @@
+import React from 'react';
 import { createMemoryHistory } from 'history';
-import { Route, Router, Prompt, Redirect, Switch } from 'react-router';
+import {
+  Route,
+  Router,
+  Prompt,
+  Redirect as ReactRedirect,
+  Switch,
+  withRouter
+} from 'react-router';
 
 let position = '#';
 let history = createMemoryHistory();
@@ -72,14 +80,28 @@ try {
   }
 } catch (err) {}
 
+function Redirect({ ...props }) {
+  // 去除相同路由的错误
+  if (props.to === history.location.pathname) {
+    return null;
+  }
+  return <ReactRedirect {...props} />;
+}
+
+function RootRouter({ ...props }) {
+  return <Router history={history} {...props} />;
+}
+
 export {
   history,
   Route,
   Router,
+  RootRouter,
   Prompt,
   Redirect,
   Switch,
   lastHistory,
+  withRouter,
   hashChange,
   position
 };
