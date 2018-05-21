@@ -4,7 +4,7 @@ import {
   Route,
   Router,
   Prompt,
-  Redirect as ReactRedirect,
+  Redirect,
   Switch,
   withRouter
 } from 'react-router';
@@ -85,14 +85,6 @@ try {
 } catch (err) {
   // err
 }
-
-const Redirect = ({ ...props }) => {
-  // 去除相同路由的错误
-  if (props.to && props.to === history.location.pathname) {
-    return null;
-  }
-  return <ReactRedirect {...props} />;
-};
 
 const RootRouter = ({ ...props }) => {
   return <Router history={history} {...props} />;
