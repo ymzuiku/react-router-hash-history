@@ -1,3 +1,4 @@
+.idea/
 logs/
 npm-debug.log
 yarn-error.log
@@ -12,6 +13,7 @@ example/
 .idea/
 .git-no/
 **/.git-no/
+**/.idea/**
 run/
 .DS_Store
 *.sw*

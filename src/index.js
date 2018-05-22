@@ -70,11 +70,13 @@ try {
     window.onhashchange = hashChange; // TODO，对应新的hash执行的操作函数
   } else {
     let oldHash = window.location.hash;
+
     function isHashChanged() {
       return oldHash === window.location.hash;
     }
+
     // 不支持则用定时器检测的办法
-    setInterval(function() {
+    setInterval(function () {
       // 检测hash值或其中某一段是否更改的函数， 在低版本的iE浏览器中通过window.location.hash取出的指和其它的浏览器不同，要注意
       var ischanged = isHashChanged();
       if (ischanged) {
