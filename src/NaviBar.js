@@ -5,7 +5,7 @@ import {
   historyAddListen,
   historyRemoveListen
 } from './routerHistory';
-import device from '../../utils/device';
+
 
 class NaviBar extends React.Component {
   static defaultProps = {
@@ -60,7 +60,7 @@ class NaviBar extends React.Component {
           ssc.container,
           this.props.style,
           {
-            marginTop: !device.isIPhoneX ? 20 : 20 + 22,
+            marginTop: !this.props.isIPhoneX ? 20 : 20 + 22
           }
         ]}
       >
@@ -80,6 +80,7 @@ const ssc = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     maxHeight: 48,
+    minHeight: 48,
     padding: 16,
     width: '100%',
     alignItems: 'center',

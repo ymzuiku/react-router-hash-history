@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { history } from './routerHistory';
-import device from '../../utils/device';
 
 class TabBarItem extends React.PureComponent {
   handleOnPress = () => {
@@ -26,7 +25,9 @@ class TabBar extends React.Component {
         style={[
           ssc.container,
           {
-            marginBottom: !device.isIPhoneX ? 0 : 22
+            maxHeight: !this.props.isIPhoneX ? 48 : 60,
+            minHeight: !this.props.isIPhoneX ? 48 : 60,
+            paddingBottom: !this.props.isIPhoneX ? 0 : 22
           }
         ]}
       >
