@@ -1,7 +1,6 @@
-import React from 'react';
 import { createMemoryHistory } from 'history';
 import {
-  Route as ReactRoute,
+  Route,
   Router,
   Prompt,
   Redirect,
@@ -83,25 +82,16 @@ try {
         // 对应新的hash执行的操作函数
         hashChange();
       }
-    }, 300);
+    }, 350);
   }
 } catch (err) {
   // err
 }
 
-const RootRouter = ({ ...props }) => {
-  return <Router history={history} {...props} />;
-};
-
-const Route = ({ path, component, render, ...props }) => {
-  return <ReactRoute exact path={path} component={component} render={render} {...props} />;
-};
-
 export {
   history,
   Route,
   Router,
-  RootRouter,
   Prompt,
   Redirect,
   Switch,
