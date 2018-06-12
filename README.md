@@ -4,6 +4,22 @@
 
 ![](markdownimg/2018-02-20-15-42-17.png)
 
+## Install
+
+add package.json
+
+```json
+"dependencies": {
+  "react-router-hash-history": "git+https://github.com/ymzuiku/react-router-hash-history.git",
+}
+```
+
+yarn install:
+
+```bash
+yarn install
+```
+
 ## How to use
 
 Create two componen
