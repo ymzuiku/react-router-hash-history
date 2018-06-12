@@ -1,112 +1,31 @@
-import React from 'react';
-import { createMemoryHistory } from 'history';
 import {
-  Route as ReactRoute,
-  Router,
+  hashChange,
+  history,
+  nowHistory,
+  position,
   Prompt,
   Redirect,
-  Switch,
-  withRouter
-} from 'react-router';
-
-let position = '#';
-let history = createMemoryHistory();
-let lastHistory = {
-  pathname: '/',
-  search: '',
-  hash: '',
-  state: undefined,
-  key: ''
-};
-history.listen(e => {
-  try {
-    if (lastHistory.key !== e.key) {
-      lastHistory = {
-        pathname: e.pathname,
-        search: e.search,
-        hash: e.hash,
-        state: e.state,
-        key: e.key
-      };
-      if (window.location) {
-        window.location.href = position + e.pathname;
-      }
-    }
-  } catch (err) {
-    // err
-  }
-});
-
-//监听触发操作
-function hashChange() {
-  try {
-    let pathname = window.location.href.split(position)[1];
-    if (pathname !== lastHistory.pathname) {
-      history.push(pathname);
-    }
-  } catch (err) {
-    // err
-  }
-}
-
-if (!window.location) {
-  window.location = {
-    href: '',
-    hash: '',
-    pathname: '',
-    hostname: '',
-    port: ''
-  };
-}
-
-try {
-  //url变化监听器
-  if (
-    'onhashchange' in window &&
-    (typeof document.documentMode === 'undefined' ||
-      document.documentMode === 8)
-  ) {
-    // 浏览器支持onhashchange事件
-    window.onhashchange = hashChange; // TODO，对应新的hash执行的操作函数
-  } else {
-    let oldHash = window.location.hash;
-
-    function isHashChanged() {
-      return oldHash === window.location.hash;
-    }
-
-    // 不支持则用定时器检测的办法
-    setInterval(function () {
-      // 检测hash值或其中某一段是否更改的函数， 在低版本的iE浏览器中通过window.location.hash取出的指和其它的浏览器不同，要注意
-      var ischanged = isHashChanged();
-      if (ischanged) {
-        // 对应新的hash执行的操作函数
-        hashChange();
-      }
-    }, 300);
-  }
-} catch (err) {
-  // err
-}
-
-const RootRouter = ({ ...props }) => {
-  return <Router history={history} {...props} />;
-};
-
-const Route = ({ path, component, render, ...props }) => {
-  return <ReactRoute exact path={path} component={component} render={render} {...props} />;
-};
-
-export {
-  history,
+  RootRouter,
   Route,
   Router,
-  RootRouter,
+  Switch,
+  withRouter
+} from './routerHistory';
+import NaviBar from './NaviBar';
+import TabBar from './TabBar';
+
+export {
+  NaviBar,
+  TabBar,
+  hashChange,
+  history,
+  nowHistory,
+  position,
   Prompt,
   Redirect,
+  RootRouter,
+  Route,
+  Router,
   Switch,
-  lastHistory,
-  withRouter,
-  hashChange,
-  position
+  withRouter
 };

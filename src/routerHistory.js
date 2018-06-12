@@ -1,6 +1,7 @@
+import React from 'react';
 import { createMemoryHistory } from 'history';
 import {
-  Route,
+  Route as ReactRoute,
   Router,
   Prompt,
   Redirect,
@@ -10,17 +11,32 @@ import {
 
 let position = '#';
 let history = createMemoryHistory();
-let lastHistory = {
+let nowHistory = {
+  index: 0,
+  length: 1,
   pathname: '/',
   search: '',
   hash: '',
   state: undefined,
   key: ''
 };
+
+let historyListenFuncs = {};
+let historyListenFuncsLength = 0;
+let historyAddListen = func => {
+  historyListenFuncsLength += 1;
+  historyListenFuncs[historyListenFuncsLength] = func;
+  return historyListenFuncsLength;
+};
+let historyRemoveListen = i => {
+  historyListenFuncs[i] = undefined;
+};
 history.listen(e => {
   try {
-    if (lastHistory.key !== e.key) {
-      lastHistory = {
+    if (nowHistory.key !== e.key) {
+      nowHistory = {
+        index: history.index,
+        length: history.length,
         pathname: e.pathname,
         search: e.search,
         hash: e.hash,
@@ -31,17 +47,32 @@ history.listen(e => {
         window.location.href = position + e.pathname;
       }
     }
+    for (let key in historyListenFuncs) {
+      if (historyListenFuncs[key]) {
+        historyListenFuncs[key](e, history);
+      }
+    }
   } catch (err) {
     // err
   }
 });
 
+// history.
 //监听触发操作
 function hashChange() {
   try {
     let pathname = window.location.href.split(position)[1];
-    if (pathname !== lastHistory.pathname) {
-      history.push(pathname);
+    if (pathname !== nowHistory.pathname) {
+      if (history.entries.length > 1) {
+        if (pathname === history.entries[history.entries.length - 2].pathname) {
+          history.goBack();
+          history.entries = history.entries.splice(history.entries.length - 2);
+          history.entries.length -= 1;
+          // history.go(history.entries.length - 2)
+        }
+      } else {
+        history.push(pathname);
+      }
     }
   } catch (err) {
     // err
@@ -65,7 +96,7 @@ try {
     (typeof document.documentMode === 'undefined' ||
       document.documentMode === 8)
   ) {
-    // 浏览器支持onhashchange事件
+    // 浏览器支持 onhashchange 事件
     window.onhashchange = hashChange; // TODO，对应新的hash执行的操作函数
   } else {
     let oldHash = window.location.hash;
@@ -75,28 +106,47 @@ try {
     }
 
     // 不支持则用定时器检测的办法
-    setInterval(function () {
+    setInterval(function() {
       // 检测hash值或其中某一段是否更改的函数， 在低版本的iE浏览器中通过window.location.hash取出的指和其它的浏览器不同，要注意
       var ischanged = isHashChanged();
       if (ischanged) {
         // 对应新的hash执行的操作函数
         hashChange();
       }
-    }, 350);
+    }, 300);
   }
 } catch (err) {
   // err
 }
 
+const RootRouter = ({ ...props }) => {
+  return <Router history={history} {...props} />;
+};
+
+const Route = ({ path, component, render, ...props }) => {
+  return (
+    <ReactRoute
+      exact
+      path={path}
+      component={component}
+      render={render}
+      {...props}
+    />
+  );
+};
+
 export {
   history,
   Route,
   Router,
+  RootRouter,
   Prompt,
   Redirect,
   Switch,
-  lastHistory,
+  nowHistory,
   withRouter,
   hashChange,
+  historyAddListen,
+  historyRemoveListen,
   position
 };
