@@ -124,15 +124,17 @@ const RootRouter = ({ ...props }) => {
 };
 
 const Route = ({ path, component, render, children, ...props }) => {
-  renderChilden = ()=>{
-    return children
-  }
   return (
     <ReactRoute
       exact
       path={path}
       component={component}
-      render={render || this.renderChilden}
+      render={
+        render ||
+        function() {
+          return children;
+        }
+      }
       {...props}
     />
   );
