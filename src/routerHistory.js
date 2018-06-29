@@ -49,7 +49,7 @@ history.listen(e => {
     }
     for (let key in historyListenFuncs) {
       if (historyListenFuncs[key]) {
-        historyListenFuncs[key](e, history);
+        historyListenFuncs[key](history, e);
       }
     }
   } catch (err) {
@@ -123,18 +123,32 @@ const RootRouter = ({ ...props }) => {
   return <Router history={history} {...props} />;
 };
 
-const Route = ({ path, component, render, children, ...props }) => {
+const Route = ({
+  exact = true,
+  path,
+  component,
+  render,
+  children,
+  ...props
+}) => {
+  if (children) {
+    return (
+      <ReactRoute
+        exact={exact}
+        path={path}
+        render={function() {
+          return children;
+        }}
+        {...props}
+      />
+    );
+  }
   return (
     <ReactRoute
-      exact
+      exact={exact}
       path={path}
       component={component}
-      render={
-        render ||
-        function() {
-          return children;
-        }
-      }
+      render={render}
       {...props}
     />
   );

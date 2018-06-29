@@ -7,11 +7,13 @@ import {
   Redirect,
   RootRouter,
   Route,
-  Router,
   Switch,
-  withRouter
+  withRouter,
+  historyAddListen,
+  historyRemoveListen,
 } from './routerHistory';
 import NaviBar from './NaviBar';
+import NaviRoute from './NaviRoute';
 import TabBar from './TabBar';
 
 export {
@@ -25,7 +27,7 @@ export {
   Redirect,
   RootRouter,
   Route,
-  Router,
+  NaviRoute,
   Switch,
   withRouter
 };
