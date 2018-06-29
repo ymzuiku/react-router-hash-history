@@ -123,13 +123,16 @@ const RootRouter = ({ ...props }) => {
   return <Router history={history} {...props} />;
 };
 
-const Route = ({ path, component, render, ...props }) => {
+const Route = ({ path, component, render, children, ...props }) => {
+  renderChilden = ()=>{
+    return children
+  }
   return (
     <ReactRoute
       exact
       path={path}
       component={component}
-      render={render}
+      render={render || this.renderChilden}
       {...props}
     />
   );
