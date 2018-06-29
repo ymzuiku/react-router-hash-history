@@ -14,7 +14,10 @@ let NaviRoute = ({
   render,
   children,
   backgroundColor,
-  moveOutFix = 0.25
+  isAnime,
+  moveOutFix,
+  moveInFix,
+  isShowdown
 }) => <View />;
 const iw = Dimensions.get('window').width;
 const ssc = StyleSheet.create({
@@ -29,13 +32,17 @@ const ssc = StyleSheet.create({
 NaviRoute = class extends React.Component {
   static defaultProps = {
     moveOutFix: 0.25,
-    backgroundColor: '#fff'
+    moveInFix: 1,
+    backgroundColor: '#fff',
+    isAnime: true,
+    isShowdown: true
   };
   constructor(props) {
     super(props);
     this.state = {
       nowRoute: false,
       index: this.props.root ? 1 : 0,
+      staticAnime: this.props.root ? 0 : iw,
       moveAnime: new Animated.Value(this.props.root ? 0 : iw)
     };
   }
@@ -43,7 +50,6 @@ NaviRoute = class extends React.Component {
     const path = this.props.path.replace('*', '');
     this.listen = historyAddListen(h => {
       let index = 0;
-      console.log(':=;', h);
       for (let i = 0; i < h.entries.length; i++) {
         const r = h.entries[i];
         if (r.pathname === path) {
@@ -54,7 +60,7 @@ NaviRoute = class extends React.Component {
         this.setState(
           {
             nowRoute: true,
-            index: 1,
+            index: 1
           },
           () => {
             this.moveNowPage(0);
@@ -62,14 +68,24 @@ NaviRoute = class extends React.Component {
         );
       } else if (index > h.index && this.state.nowRoute) {
         this.setState(
-          { nowRoute: false, index: 0, moveAnime: new Animated.Value(0) },
+          {
+            nowRoute: false,
+            index: 0,
+            staticAnime: 0,
+            moveAnime: new Animated.Value(0)
+          },
           () => {
-            this.moveNowPage(iw);
+            this.moveNowPage(iw * this.props.moveInFix);
           }
         );
       } else if (index < h.index && this.state.nowRoute) {
         this.setState(
-          { nowRoute: false, index: 0, moveAnime: new Animated.Value(0) },
+          {
+            nowRoute: false,
+            index: 0,
+            staticAnime: 0,
+            moveAnime: new Animated.Value(0)
+          },
           () => {
             this.moveNowPage(-iw * this.props.moveOutFix);
           }
@@ -80,14 +96,19 @@ NaviRoute = class extends React.Component {
   componentWillUnmount() {
     historyRemoveListen(this.listen);
   }
-  moveNowPage = (x, o) => {
-    console.log(',,', x);
-    Animated.spring(this.state.moveAnime, {
-      useNativeDriver: true,
-      toValue: x,
-      damping: 40,
-      stiffness: 350
-    }).start();
+  moveNowPage = x => {
+    if (this.props.isAnime) {
+      Animated.spring(this.state.moveAnime, {
+        useNativeDriver: true,
+        toValue: x,
+        damping: 33,
+        stiffness: 300
+      }).start();
+    } else {
+      this.setState({
+        staticAnime: x
+      });
+    }
   };
   render() {
     return (
@@ -95,9 +116,19 @@ NaviRoute = class extends React.Component {
         style={[
           ssc.container,
           {
+            shadowOpacity: 0.07,
+            shadowOffset: { width: -3, height: 0 },
+            shadowColor: '#000',
+            shadowRadius: 0,
             backgroundColor: this.props.backgroundColor,
             zIndex: this.state.index,
-            transform: [{ translateX: this.state.moveAnime }]
+            transform: [
+              {
+                translateX: this.props.isAnime
+                  ? this.state.moveAnime
+                  : this.state.staticAnime
+              }
+            ]
           }
         ]}
       >
